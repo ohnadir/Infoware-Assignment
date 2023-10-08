@@ -41,8 +41,44 @@ exports.employee = async (id) =>{
 }
 
 
-exports.update_employee = async (id) =>{
-    const [rows] = await pool.query("UPDATE * FROM employee")
+exports.update_employee = async (id, name, job_title, phone, email, address, city, state, emergency_phone) =>{
+    const [exist] = await pool.query(` SELECT *  FROM employee WHERE id = ?`, [id]);
+    const updatedFields = {};
+    
+    if (name !== undefined && name !== exist[0].name) {
+        updatedFields.name = name;
+    }
+    if (job_title !== undefined && job_title !== exist[0].job_title) {
+        updatedFields.job_title = job_title;
+    }
+    if (phone !== undefined && phone !== exist[0].phone) {
+        updatedFields.phone = phone;
+    }
+    if (email !== undefined && email !== exist[0].email) {
+        updatedFields.email = email;
+    }
+    if (address !== undefined && address !== exist[0].address) {
+        updatedFields.address = address;
+    }
+
+    if (city !== undefined && city !== exist[0].city) {
+        updatedFields.city = city;
+    }
+    if (state !== undefined && state !== exist[0].state) {
+        updatedFields.state = state;
+    }
+    if (emergency_phone !== undefined && emergency_phone !== exist[0].emergency_phone) {
+        updatedFields.emergency_phone = emergency_phone;
+    }
+
+    const updateQuery = `
+        UPDATE employee
+        SET ${Object.keys(updatedFields).map((key) => `${key} = ?`).join(', ')} 
+        WHERE id = ?
+    `;
+    const updatedValues = Object.values(updatedFields);
+    updatedValues.push(id);
+    const [rows] = await pool.query(updateQuery, updatedValues)
     return rows
 }
 

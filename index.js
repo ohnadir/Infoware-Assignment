@@ -33,7 +33,8 @@ app.get("/employee/:id", async (req, res) => {
 
 app.patch("/employee/update/:id", async (req, res) => {
     const id = req.params.id;
-    await update_employee(id)
+    const { name, job_title, phone, email, address, city, state, emergency_phone } = req.body;
+    await update_employee(id, name, job_title, phone, email, address, city, state, emergency_phone)
     res.status(200).json({
         code : 200,
         status : "success",
