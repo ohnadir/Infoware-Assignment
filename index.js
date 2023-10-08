@@ -3,6 +3,7 @@ const app = express();
 app.use(express.json())
 const  { create_employee, employeeList, employee, update_employee, deleteEmployee } =require('./database.js')
 
+// create employee api
 app.post("/employee/create_employee", async (req, res) => {
     const { id, name, job_title, phone, email, address, city, state, emergency_phone, relationship } = req.body
     await create_employee(id, name, job_title, phone, email, address, city, state, emergency_phone, relationship)
@@ -14,6 +15,7 @@ app.post("/employee/create_employee", async (req, res) => {
 })
 
 
+// employee List with pagination
 app.get("/employees", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
@@ -25,6 +27,7 @@ app.get("/employees", async (req, res) => {
     });
 })
 
+// single employee API
 app.get("/employee/:id", async (req, res) => {
     const id = req.params.id;
     const singleEmployee= await employee(id)
@@ -35,6 +38,7 @@ app.get("/employee/:id", async (req, res) => {
     });
 })
 
+// employee update API
 app.patch("/employee/update/:id", async (req, res) => {
     const id = req.params.id;
     const { name, job_title, phone, email, address, city, state, emergency_phone, relationship } = req.body;
@@ -46,6 +50,7 @@ app.patch("/employee/update/:id", async (req, res) => {
     });
 })
 
+// Delete employee API
 app.delete("/employee/delete/:id", async (req, res) => {
     const id = req.params.id;
     await deleteEmployee(id);

@@ -1,6 +1,7 @@
 const mysql = require('mysql2/promise');
 
 
+// connect with mysql database
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
@@ -8,6 +9,7 @@ const pool = mysql.createPool({
     database: 'infoware'
 })
 
+// create employee Controller
 exports.create_employee = async (id, name, job_title, phone, email, address, city, state, emergency_phone) =>{
     
     try {
@@ -21,6 +23,7 @@ exports.create_employee = async (id, name, job_title, phone, email, address, cit
     }
 }
 
+// employee List Controller
 exports.employeeList = async (page, size) =>{
     const offset = (page - 1) * size;
     const countQuery = 'SELECT COUNT(*) AS total FROM employee';
@@ -35,12 +38,13 @@ exports.employeeList = async (page, size) =>{
     return data;
 }
 
+// employee API Controller
 exports.employee = async (id) =>{
     const [rows] = await pool.query(` SELECT *  FROM employee WHERE id = ?`, [id])
     return rows[0]
 }
 
-
+// update API Controller
 exports.update_employee = async (id, name, job_title, phone, email, address, city, state, emergency_phone) =>{
     const [exist] = await pool.query(` SELECT *  FROM employee WHERE id = ?`, [id]);
     const updatedFields = {};
@@ -82,6 +86,8 @@ exports.update_employee = async (id, name, job_title, phone, email, address, cit
     return rows
 }
 
+
+// Delete API Controller
 exports.deleteEmployee = async (id) =>{
     const [rows] = await pool.query(` DELETE FROM employee WHERE id = ?`, [id])
     return rows;
