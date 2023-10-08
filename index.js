@@ -1,12 +1,16 @@
-const  { create_employee, employeeList, employee, update_employee, deleteEmployee } =require('./database.js')
 const  express = require('express')
 const app = express();
 app.use(express.json())
+const  { create_employee, employeeList, employee, update_employee, deleteEmployee } =require('./database.js')
 
 app.post("/employee/create_employee", async (req, res) => {
     const { id, name, job_title, phone, email, address, city, state, emergency_phone, relationship } = req.body
-    const employee = await create_employee(id, name, job_title, phone, email, address, city, state, emergency_phone, relationship)
-    res.status(201).send(employee);
+    await create_employee(id, name, job_title, phone, email, address, city, state, emergency_phone, relationship)
+    res.status(200).json({
+        code : 200,
+        status : "success",
+        message: "Employee Created Successfully"
+    });
 })
 
 
@@ -33,8 +37,8 @@ app.get("/employee/:id", async (req, res) => {
 
 app.patch("/employee/update/:id", async (req, res) => {
     const id = req.params.id;
-    const { name, job_title, phone, email, address, city, state, emergency_phone } = req.body;
-    await update_employee(id, name, job_title, phone, email, address, city, state, emergency_phone)
+    const { name, job_title, phone, email, address, city, state, emergency_phone, relationship } = req.body;
+    await update_employee(id, name, job_title, phone, email, address, city, state, emergency_phone, relationship)
     res.status(200).json({
         code : 200,
         status : "success",
