@@ -14,25 +14,41 @@ app.get("/employees", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const size = parseInt(req.query.size) || 10;
     const employees = await employeeList(page, size)
-    res.send(employees);
+    res.status(200).json({
+        code : 200,
+        status : "success",
+        data: employees
+    });
 })
 
 app.get("/employee/:id", async (req, res) => {
     const id = req.params.id;
     const singleEmployee= await employee(id)
-    res.send(singleEmployee);
+    res.status(200).json({
+        code : 200,
+        status : "success",
+        singleEmployee: singleEmployee
+    });
 })
 
 app.patch("/employee/update/:id", async (req, res) => {
     const id = req.params.id;
-    const employee = await update_employee(id)
-    res.send(employee);
+    await update_employee(id)
+    res.status(200).json({
+        code : 200,
+        status : "success",
+        message: "Employee Update Successfully"
+    });
 })
 
 app.delete("/employee/delete/:id", async (req, res) => {
     const id = req.params.id;
-    const employee = await deleteEmployee(id);
-    res.send(employee);
+    await deleteEmployee(id);
+    res.status(200).json({
+        code : 200,
+        status : "success",
+        message: "Employee Delete Successfully"
+    });
 })
 
 
